@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Book</title>
+
+    <style>
+        body { 
+            font-family: Arial; 
+            background:#f4f4f4; 
+            display:flex; 
+            justify-content:center; 
+            align-items:center; 
+            height:100vh; 
+        }
+
+        .form-box { 
+            background:white; 
+            padding:30px; 
+            border-radius:8px; 
+            width:350px; 
+        }
+
+        input { 
+            width:100%; 
+            padding:10px; 
+            margin:10px 0; 
+        }
+
+        button { 
+            width:100%; 
+            padding:10px; 
+            background:#4CAF50; 
+            color:white; 
+            border:none; 
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h2>📚 Add Book</h2>
+
+    <p th:text="${message}" style="color:red;"></p>
+    <form action="/saveBook" method="post">
+
+        <input type="text" name="bookId" placeholder="Book ID" required>
+
+        <input type="text" name="bookName" placeholder="Book Name" required>
+
+        <input type="text" name="publisher" placeholder="Publisher" required>
+
+        <input type="number" name="price" placeholder="Price" required>
+
+        <input type="number" name="publishYear" placeholder="Publish Year" required>
+
+        <button type="submit">Save</button>
+
+    </form>
+</div>
+
+</body>
+</html>

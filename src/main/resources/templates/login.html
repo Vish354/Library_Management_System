@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+            /* Background */
+            background: linear-gradient(to right, #141e30, #243b55);
+
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+
+            padding: 40px;
+            border-radius: 10px;
+            width: 320px;
+
+            text-align: center;
+            color: white;
+
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input:focus {
+            box-shadow: 0 0 5px #00c6ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+
+            background: #00c6ff;
+            border: none;
+            border-radius: 5px;
+
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0072ff;
+        }
+
+        .error {
+            color: #ff4d4d;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h2>📚 Library Login</h2>
+
+    <!-- 🔥 ERROR MESSAGE -->
+    <p class="error" th:text="${message}"></p>
+
+    <!-- 🔥 IMPORTANT FIX -->
+    <form action="/login" method="post">
+
+        <input type="text" name="username" placeholder="Username" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

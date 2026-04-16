@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Registration</title>
+
+    <style>
+        body { font-family: Arial; background:#f4f4f4; display:flex; justify-content:center; align-items:center; height:100vh; }
+        .form-box { background:white; padding:30px; border-radius:8px; width:350px; }
+        input { width:100%; padding:8px; margin:10px 0; }
+        button { width:100%; padding:10px; background:#4CAF50; color:white; border:none; }
+    </style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h2>🎓 Student Registration</h2>
+
+    <p id="msg"
+       th:text="${message}"
+       th:style="${message != null and message.contains('Success')} ? 'color:green' : 'color:red'"
+       style="font-weight: bold;">
+    </p>
+
+    <form action="/saveStudent" method="post">
+        <input type="text" name="studentId" placeholder="Student ID" required>
+
+        <input type="text" name="studentName" 
+               placeholder="Student Name" 
+               pattern="[A-Za-z ]+" 
+               title="Only characters allowed"
+               required>
+
+        <input type="text" name="course" placeholder="Course" required>
+        <input type="text" name="branch" placeholder="Branch" required>
+        <input type="text" name="semester" placeholder="Semester" required>
+
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+<!-- ✅ SCRIPT YAHAN HOGA -->
+<script>
+    setTimeout(function() {
+        let msg = document.getElementById("msg");
+        if (msg) {
+            msg.style.display = "none";
+        }
+    }, 3000);
+</script>
+
+</body>
+</html>

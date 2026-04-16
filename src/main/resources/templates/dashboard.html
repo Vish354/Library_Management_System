@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+            /* FULL BACKGROUND IMAGE */
+            background-image: url('/library.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            /* Dark overlay effect */
+            background-color: rgba(0,0,0,0.6);
+            background-blend-mode: darken;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            width: 250px;
+            padding: 12px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .student { background: #2196F3; }
+        .add { background: #4CAF50; }
+        .issue { background: #FF9800; }
+        .return { background: #9C27B0; }
+        .logout { background: red; }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📚 Library Management Dashboard</h1>
+
+<a href="/student" class="btn student">Student Registration</a>
+<a href="/addBook" class="btn add">Add Book</a>
+<a th:href="@{/issue-book}" class="btn issue">Issue Book</a>
+<!-- 🔥 FIXED -->
+<a href="/return-book" class="btn return">Return Book</a>
+<a href="/logout" class="btn logout">Logout</a>
+
+</body>
+</html>

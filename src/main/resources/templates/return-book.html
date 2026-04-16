@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Return Book</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            margin: 8px;
+            padding: 10px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Return Book</h2>
+
+<!-- 🔥 MESSAGE -->
+<p id="msg"
+   th:if="${message != null}"
+   th:text="${message}"
+   style="color:red;">
+</p>
+
+<!-- 🔥 SEARCH -->
+<input type="text" id="studentId" placeholder="Enter Student ID">
+<button onclick="searchIssue()">Search</button>
+
+<br><br>
+
+<!-- 🔥 AUTO FILL -->
+<input type="text" id="bookId" placeholder="Book ID" readonly><br>
+<input type="text" id="bookName" placeholder="Book Name" readonly><br>
+<input type="text" id="studentName" placeholder="Student Name" readonly><br>
+<input type="text" id="issueDate" placeholder="Issue Date" readonly><br>
+<input type="text" id="dueDate" placeholder="Due Date" readonly><br>
+
+<br>
+
+<!-- 🔥 RETURN BUTTON -->
+<form action="/return-book" method="post">
+    <input type="hidden" name="studentId" id="hiddenStudentId">
+     <input type="hidden" name="bookId" id="hiddenBookId">   <!-- 🔥 ADD THIS -->
+    <button type="submit" id="returnBtn" disabled>Return Book</button>
+</form>
+
+<!-- 🔥 JAVASCRIPT -->
+<script>
+function searchIssue() {
+
+    let id = document.getElementById("studentId").value.trim();
+
+    if (!id) {
+        alert("Enter Student ID");
+        return;
+    }
+
+    fetch("/getIssue/" + id)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Server error");
+        }
+        return res.json();
+    })
+    .then(data => {
+
+        console.log("Issue Data:", data);
+
+        // ✅ FIX: proper validation
+        if (data && data.bookId !== null && data.bookId !== "") {
+
+            document.getElementById("bookId").value = data.bookId;
+            document.getElementById("hiddenBookId").value = data.bookId; // 🔥 IMPORTANT
+            document.getElementById("issueDate").value = data.issueDate;
+            document.getElementById("dueDate").value = data.dueDate;
+            document.getElementById("hiddenStudentId").value = id;
+
+            // ✅ enable button
+            document.getElementById("returnBtn").disabled = false;
+
+            // 🔥 Book Name
+            fetch("/getBook/" + data.bookId)
+            .then(res => res.json())
+            .then(book => {
+                if (book && book.bookName) {
+                    document.getElementById("bookName").value = book.bookName;
+                }
+            });
+
+            // 🔥 Student Name
+            fetch("/getStudent/" + id)
+            .then(res => res.json())
+            .then(student => {
+                if (student && student.studentName) {
+                    document.getElementById("studentName").value = student.studentName;
+                }
+            });
+
+        } else {
+            alert("No record found for this student!");
+            // 🔥 RESET ALL FIELDS
+    document.getElementById("bookId").value = "";
+    document.getElementById("bookName").value = "";
+    document.getElementById("studentName").value = "";
+    document.getElementById("issueDate").value = "";
+    document.getElementById("dueDate").value = "";
+    document.getElementById("hiddenBookId").value = "";
+    document.getElementById("hiddenStudentId").value = "";
+
+    document.getElementById("returnBtn").disabled = true;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("No record found for this student!");
+
+        // 🔥 RESET
+    document.getElementById("returnBtn").disabled = true;
+    });
+}
+
+// 🔥 Message auto hide
+setTimeout(() => {
+  let msg = document.getElementById("msg");
+  if(msg) msg.style.display = "none";
+}, 3000);
+</script>
+
+
+</body>
+</html>

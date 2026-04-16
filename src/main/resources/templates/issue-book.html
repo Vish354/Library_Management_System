@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Issue Book</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+        }
+
+        .container {
+            width: 400px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0 15px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row input {
+            flex: 2;
+        }
+
+        .row button {
+            flex: 1;
+        }
+
+        .btn {
+            background: green;
+            color: white;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .search-btn {
+            background: blue;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+
+<script>
+    setTimeout(function() {
+        let msg = document.getElementById("msg");
+        if (msg) {
+            msg.style.display = "none";
+        }
+    }, 3000); // 3000 ms = 3 seconds
+</script>
+
+<body>
+
+<div class="container">
+    <h2>📚 Issue Book</h2>
+
+<p id="msg" th:text="${message}" 
+   style="color: green; font-weight: bold;"></p>
+
+    <form th:action="@{/issue-book}" method="post">
+
+        <!-- 🔥 Book ID + Search -->
+        <label>Book ID</label>
+        <div class="row">
+            <input type="number" id="bookId" name="bookId" placeholder="Enter Book ID">
+
+            <button type="button" class="search-btn" onclick="searchBook()">Search</button>
+        </div>
+
+        <!-- Book Name -->
+        <label>Book Name</label>
+        <input type="text" id="bookName" name="bookName" readonly>
+
+        <!-- 🔥 Student ID (TYPE) -->
+        <label>Student ID:</label>
+<input type="number" name="studentId" required>
+
+        <!-- Dates -->
+        <label>Issue Date</label>
+        <input type="date" name="issueDate">
+
+        <label>Due Date</label>
+        <input type="date" name="dueDate">
+
+        <button type="submit" class="btn">Issue</button>
+
+    </form>
+
+    <p th:text="${message}"></p>
+</div>
+
+<!-- 🔥 JavaScript -->
+<script>
+function searchBook() {
+
+    let id = document.getElementById("bookId").value.trim();
+
+    // 🔥 Empty check
+    if (!id) {
+        alert("Enter Book ID");
+        return;
+    }
+
+    // 🔥 Use relative URL (BEST PRACTICE)
+    fetch("/getBook/" + id)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Server error");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("DATA:", data);
+
+        // 🔥 Proper null check
+        if (data && data.bookName) {
+            document.getElementById("bookName").value = data.bookName;
+        } else {
+            document.getElementById("bookName").value = "";
+            alert("Book not found!");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("bookName").value = "";
+        alert("Error fetching book!");
+    });
+}
+</script>
+
+</body>
+</html>
